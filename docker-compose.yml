@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mongodb-service:
+    image: mongo:7.0.2 
+    ports:
+      - 27017:27017
+    networks:
+      - DockerNet
+    volumes:
+      - mongovol:/var/lib/mongodata
+
+  backend:
+    image: backend
+    ports:
+      - 5000:5000
+    networks:
+      - DockerNet
+    depends_on:
+      - mongodb-service
+
+  frontend:
+    image: frontend
+    ports: 
+      - 80:80
+    networks:
+      - DockerNet
+    depends_on:
+      - backend
+
+networks:
+  DockerNet:
+    driver: bridge
+volumes:
+  mongovol:
+    driver: local
